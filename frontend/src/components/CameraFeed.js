@@ -204,8 +204,7 @@ const CameraFeed = ({ onDetectionComplete }) => {
                   <FaUpload /> Upload Photo
                 </label>
               </div>
-             <input type="file" accept="image/*" capture="environment" onChange={handleFileSelect} className="file-input" id="image-upload" />
-            </div>
+            <input type="file" accept="image/*" onChange={handleFileSelect} className="file-input" id="image-upload" />
           </div>
         )}
       </div>
