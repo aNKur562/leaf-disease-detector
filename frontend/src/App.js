@@ -41,7 +41,6 @@ function App() {
             </div>
           </div>
         } />
-      
         <Route path="/analytics" element={
           <div className="app">
             <div className="content-overlay">
