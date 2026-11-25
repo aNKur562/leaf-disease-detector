@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaCamera, FaUpload, FaSpinner, FaCheckCircle, FaExclamationTriangle, FaLeaf, FaImage, FaTrashAlt } from 'react-icons/fa';
 import '../styles/CameraFeed.css';
 
-const CameraFeed = ({ onDetectionComplete }) => {
+const CameraFeed = ({ onDetectionComplete, showConsole, setShowConsole, setConsoleLogs }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -40,11 +40,16 @@ const CameraFeed = ({ onDetectionComplete }) => {
     }
   }, [useCamera]);
 
+  const addLog = (text) => {
+    setConsoleLogs(prev => [...prev, text]);
+  };
+
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedImage(file);
       setError(null);
+      setConsoleLogs([]); // Clear console on new image
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
@@ -63,6 +68,7 @@ const CameraFeed = ({ onDetectionComplete }) => {
         const file = new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
         setSelectedImage(file);
         setImagePreview(canvas.toDataURL('image/jpeg'));
+        setConsoleLogs([]);
         
         const stream = video.srcObject;
         if (stream) stream.getTracks().forEach(track => track.stop());
@@ -76,6 +82,15 @@ const CameraFeed = ({ onDetectionComplete }) => {
 
     setUploading(true);
     setError(null);
+    setConsoleLogs([]); // Clear previous logs
+
+    if (showConsole) {
+      addLog(`[INFO] Starting diagnosis for ${selectedImage.name || 'camera_capture.jpg'}`);
+      addLog(`[PREPROCESS] Reading image and extracting pixels...`);
+      addLog(`[PREPROCESS] Resizing to 224x224 and normalizing RGB (0.0 - 1.0)...`);
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 800)); 
 
     try {
       const originalFetch = window.fetch;
@@ -86,12 +101,22 @@ const CameraFeed = ({ onDetectionComplete }) => {
         return originalFetch(url, options);
       };
 
+      if (showConsole) addLog(`[TENSOR] Converting image to Tensor [1, 224, 224, 3]...`);
+      
       const result = await window.mangocareBrowser.classify(selectedImage);
       window.fetch = originalFetch;
 
       const diseaseName = result.label;
       const confidence = (result.scores[diseaseName] * 100).toFixed(1);
       const isDiseased = diseaseName === "Anthracnose";
+      
+      const anthracnoseScore = (result.scores["Anthracnose"] * 100).toFixed(1);
+      const healthyScore = (result.scores["Healthy"] * 100).toFixed(1);
+
+      if (showConsole) {
+        addLog(`[INFERENCE] Running YOLO11n via WebAssembly...`);
+        addLog(`[OUTPUT] Raw Scores -> Anthracnose: ${anthracnoseScore}% | Healthy: ${healthyScore}%`);
+      }
 
       const responseData = {
         success: true,
@@ -103,15 +128,28 @@ const CameraFeed = ({ onDetectionComplete }) => {
         disease: {
           name: diseaseName,
           confidence: `${confidence}%`,
-          treatment: isDiseased ? "Apply fungicide and remove infected leaves." : null
+          treatment: isDiseased ? "Apply appropriate fungicide and remove infected leaves." : null
         }
       };
+
+      if (isDiseased) {
+        if (showConsole) {
+          addLog(`[DIAGNOSIS] Highest probability: Anthracnose (${confidence}%)`);
+          addLog(`[RECOMMENDATION] (Prevention: Apply fungicide and remove infected leaves)`);
+        }
+      } else {
+        if (showConsole) {
+          addLog(`[DIAGNOSIS] Highest probability: Healthy (${confidence}%)`);
+          addLog(`[RECOMMENDATION] (Maintain current care, no immediate action needed)`);
+        }
+      }
 
       if (onDetectionComplete) onDetectionComplete(responseData);
 
     } catch (err) {
       console.error(err);
       setError("Error: " + err.message);
+      if (showConsole) addLog(`[ERROR] ${err.message}`);
       window.fetch = window.fetch.bind(window); 
     } finally {
       setUploading(false);
@@ -123,6 +161,7 @@ const CameraFeed = ({ onDetectionComplete }) => {
     setImagePreview(null);
     setError(null);
     setUseCamera(false);
+    setConsoleLogs([]);
     if (onDetectionComplete) onDetectionComplete(null);
   };
 
@@ -136,6 +175,16 @@ const CameraFeed = ({ onDetectionComplete }) => {
         <div className="header-right">
           <span className="status-badge active"><FaCamera /> {modelReady ? "AI Ready" : "Loading AI..."}</span>
         </div>
+      </div>
+
+      {/* Modern Toggle Switch */}
+      <div className="console-toggle-wrapper">
+        <label className="console-toggle-label" onClick={() => setShowConsole(!showConsole)}>
+          Show AI Workflow Console
+          <div className={`toggle-switch ${showConsole ? 'active' : ''}`}>
+            <div className="toggle-slider"></div>
+          </div>
+        </label>
       </div>
 
       <div className="feed-container">
