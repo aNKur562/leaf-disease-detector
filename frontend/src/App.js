@@ -41,7 +41,7 @@ function App() {
             </div>
           </div>
         } />
-        // In your App.js, find the Analytics route and update it:
+      
         <Route path="/analytics" element={
           <div className="app">
             <div className="content-overlay">
