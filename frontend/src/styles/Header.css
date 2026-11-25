@@ -203,3 +203,54 @@
     background: rgba(26, 44, 26, 0.9);
   }
 }
+/* --- Swipeable Navigation --- */
+.nav-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  overflow-x: auto; /* Enables scrolling */
+  white-space: nowrap; /* Prevents text wrapping */
+  padding-bottom: 5px;
+  
+  /* Hide scrollbar */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.nav-container::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-container > * {
+  flex: 0 0 auto; /* Prevents buttons from squishing */
+}
+
+/* --- Mobile Adjustments --- */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px !important;
+    gap: 10px;
+  }
+
+  .header-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  /* Hide the big clock to free up space */
+  .desktop-only-time {
+    display: none !important;
+  }
+
+  /* Make the logo text smaller */
+  .logo-text h1 {
+    font-size: 18px !important;
+  }
+  
+  .logo-text .tagline {
+    font-size: 11px !important;
+  }
+}

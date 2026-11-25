@@ -6,14 +6,12 @@ import '../styles/Header.css';
 const Header = ({ transparent = false }) => {
   const location = useLocation();
   
-  // Day/Night Timer with live updates
   const [currentTime, setCurrentTime] = useState(new Date());
   
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
-    }, 60000); // Update every minute
-    
+    }, 60000);
     return () => clearInterval(timer);
   }, []);
   
@@ -35,7 +33,8 @@ const Header = ({ transparent = false }) => {
       </div>
       
       <div className="header-right">
-        <div className="time-display">
+        {/* This hides completely on mobile via CSS */}
+        <div className="time-display desktop-only-time">
           <div className={`time-icon ${isDayTime ? 'day' : 'night'}`}>
             {isDayTime ? '☀️' : '🌙'}
           </div>
@@ -46,7 +45,8 @@ const Header = ({ transparent = false }) => {
           </div>
         </div>
         
-        <nav className="nav">
+        {/* The new swipeable navigation container */}
+        <nav className="nav-container">
           <Link 
             to="/" 
             className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
