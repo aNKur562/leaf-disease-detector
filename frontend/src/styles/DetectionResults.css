@@ -1,0 +1,91 @@
+/* Treatment Plans */
+.treatment-plans {
+  margin-bottom: 20px;
+}
+
+.treatment-plans h3 {
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+}
+
+.treatment-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 4px solid #4CAF50;
+}
+
+.treatment-card h4 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.treatment-steps {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.treatment-steps li {
+  margin: 8px 0;
+  line-height: 1.4;
+  color: #555;
+}
+
+/* Priority-based tip styling */
+.tip-item.critical {
+  background: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+.tip-item.high {
+  background: #fff3e0;
+  border-left: 4px solid #ff9800;
+}
+
+.tip-item.medium {
+  background: #e8f5e9;
+  border-left: 4px solid #4CAF50;
+}
+
+.tip-item.low {
+  background: #e3f2fd;
+  border-left: 4px solid #2196F3;
+}
+
+.tip-item {
+  transition: transform 0.2s;
+}
+
+.tip-item:hover {
+  transform: translateX(5px);
+}
+
+/* Enhanced symptoms section */
+.symptom-item {
+  background: linear-gradient(135deg, #ffeb3b20 0%, #ffc10720 100%);
+  transition: transform 0.2s;
+}
+
+.symptom-item:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .treatment-card {
+    padding: 12px;
+  }
+  
+  .treatment-steps {
+    padding-left: 15px;
+  }
+  
+  .treatment-steps li {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,124 @@
+/* Add to your existing App.css */
+
+/* Global reset for better box sizing */
+* {
+  box-sizing: border-box;
+}
+
+/* Main container adjustments */
+.main-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+}
+
+/* Detection section layout */
+.detection-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Responsive: Stack on smaller screens */
+@media (max-width: 968px) {
+  .detection-section {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .main-container {
+    padding: 15px;
+  }
+}
+
+/* Content overlay - ensure scrolling */
+.content-overlay {
+  min-height: 100vh;
+  overflow-x: auto;
+}
+
+/* Footer fixes */
+.footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+/* --- Add to bottom of App.css --- */
+
+/* Global reset for better box sizing */
+* {
+  box-sizing: border-box;
+}
+
+/* Main container adjustments */
+.main-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+}
+
+/* Detection section layout */
+.detection-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Content overlay - ensure scrolling */
+.content-overlay {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Footer fixes */
+.footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Phone Optimizations (Fixes the messy UI) */
+@media (max-width: 768px) {
+  .detection-section {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .main-container {
+    padding: 10px;
+  }
+
+  /* Fix the header buttons overflowing off screen */
+  .header-nav, .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 5px;
+  }
+
+  .nav-link, .header-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  /* Make the home page text fit better */
+  .hero-title-simple {
+    font-size: 36px !important;
+    margin-bottom: 10px !important;
+  }
+  
+  .text-line-simple {
+    font-size: 18px !important;
+  }
+  
+  .home-overlay {
+    padding: 20px;
+  }
+}
