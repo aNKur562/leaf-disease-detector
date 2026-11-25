@@ -6,11 +6,9 @@ const CameraFeed = ({ onDetectionComplete }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState(null);
   const [modelReady, setModelReady] = useState(false);
   
-  // New state for camera
   const [useCamera, setUseCamera] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -25,13 +23,12 @@ const CameraFeed = ({ onDetectionComplete }) => {
     return () => clearInterval(checkInterval);
   }, []);
 
-  // Start Camera Stream
   useEffect(() => {
     if (useCamera && videoRef.current) {
       const startCamera = async () => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'environment' } // 'environment' forces the back camera
+            video: { facingMode: 'environment' } 
           });
           videoRef.current.srcObject = stream;
         } catch (err) {
@@ -54,7 +51,6 @@ const CameraFeed = ({ onDetectionComplete }) => {
     }
   };
 
-  // Capture photo from video stream
   const capturePhoto = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -63,13 +59,11 @@ const CameraFeed = ({ onDetectionComplete }) => {
       canvas.height = video.videoHeight;
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       
-      // Convert canvas to blob/file
       canvas.toBlob((blob) => {
         const file = new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
         setSelectedImage(file);
         setImagePreview(canvas.toDataURL('image/jpeg'));
         
-        // Stop the camera stream
         const stream = video.srcObject;
         if (stream) stream.getTracks().forEach(track => track.stop());
         setUseCamera(false);
@@ -81,7 +75,6 @@ const CameraFeed = ({ onDetectionComplete }) => {
     if (!selectedImage || !modelReady) return;
 
     setUploading(true);
-    setUploadProgress(50);
     setError(null);
 
     try {
@@ -115,8 +108,6 @@ const CameraFeed = ({ onDetectionComplete }) => {
       };
 
       if (onDetectionComplete) onDetectionComplete(responseData);
-      setUploadProgress(100);
-      setTimeout(() => setUploadProgress(0), 2000);
 
     } catch (err) {
       console.error(err);
@@ -130,7 +121,6 @@ const CameraFeed = ({ onDetectionComplete }) => {
   const handleReset = () => {
     setSelectedImage(null);
     setImagePreview(null);
-    setUploadProgress(0);
     setError(null);
     setUseCamera(false);
     if (onDetectionComplete) onDetectionComplete(null);
@@ -204,7 +194,9 @@ const CameraFeed = ({ onDetectionComplete }) => {
                   <FaUpload /> Upload Photo
                 </label>
               </div>
-            <input type="file" accept="image/*" onChange={handleFileSelect} className="file-input" id="image-upload" />
+              
+              <input type="file" accept="image/*" onChange={handleFileSelect} className="file-input" id="image-upload" style={{ display: 'none' }} />
+            </div>
           </div>
         )}
       </div>
