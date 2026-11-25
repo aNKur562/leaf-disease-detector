@@ -11,43 +11,11 @@
   transition: all 0.3s ease;
 }
 
-/* Transparent header styles */
 .header.transparent {
   background: transparent;
   box-shadow: none;
   position: absolute;
   width: 100%;
-}
-
-.header.transparent .logo {
-  opacity: 0.9;
-}
-
-.header.transparent .logo:hover {
-  opacity: 1;
-}
-
-.header.transparent .time-display {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.header.transparent .nav-link {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.header.transparent .nav-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.header.transparent .nav-link.active {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .header-left {
@@ -62,11 +30,6 @@
   gap: 15px;
   text-decoration: none;
   color: inherit;
-  transition: opacity 0.3s ease;
-}
-
-.logo:hover {
-  opacity: 0.9;
 }
 
 .logo-icon {
@@ -104,21 +67,11 @@
   padding: 10px 20px;
   border-radius: 25px;
   backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
+  white-space: nowrap; /* Prevents the clock text from wrapping and breaking */
 }
 
 .time-icon {
   font-size: 24px;
-}
-
-.time-icon.day {
-  color: #FFD700;
-  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
-}
-
-.time-icon.night {
-  color: #BBDEFB;
-  filter: drop-shadow(0 0 5px rgba(187, 222, 251, 0.3));
 }
 
 .time-info {
@@ -131,15 +84,29 @@
   font-size: 16px;
 }
 
-.day-night {
-  font-size: 12px;
+.day-night, .date {
+  font-size: 11px;
   opacity: 0.8;
 }
 
-.date {
-  font-size: 11px;
-  opacity: 0.6;
-  margin-top: 2px;
+.nav-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 5px;
+  width: 100%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.nav-container::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-container > * {
+  flex: 0 0 auto !important;
 }
 
 .nav-link {
@@ -150,57 +117,22 @@
   gap: 8px;
   padding: 12px 25px;
   border-radius: 25px;
-  transition: all 0.3s ease;
   font-weight: 500;
   font-size: 14px;
   background: rgba(255, 255, 255, 0.1);
 }
 
-.nav-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
 .nav-link.active {
   background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* --- Swipeable Navigation --- */
-.nav-container {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  overflow-x: auto; /* Enables scrolling */
-  white-space: nowrap;
-  padding-bottom: 5px;
-  width: 100%;
-  max-width: 100vw;
-  
-  /* Hide scrollbar */
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.nav-container::-webkit-scrollbar {
-  display: none;
-}
-
-.nav-container > * {
-  flex: 0 0 auto !important; /* Prevents buttons from squishing */
-}
-
-/* --- Mobile Adjustments --- */
+/* --- MOBILE FIX --- */
 @media (max-width: 1024px) {
   .header {
     flex-direction: column;
     align-items: flex-start;
     padding: 15px !important;
     gap: 15px;
-  }
-  
-  .header-left {
-    width: 100%;
   }
   
   .header-right {
@@ -210,7 +142,8 @@
     gap: 15px;
   }
 
-  .desktop-only-time {
+  /* HIDE THE CLOCK ON MOBILE - NO EXCEPTIONS */
+  .time-display, .desktop-only-time {
     display: none !important;
   }
   
@@ -220,10 +153,5 @@
 
   .logo-text h1 {
     font-size: 20px !important;
-  }
-
-  .header.transparent {
-    position: relative;
-    background: rgba(26, 44, 26, 0.9);
   }
 }
